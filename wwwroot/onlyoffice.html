@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="http://localhost/web-apps/apps/api/documents/api.js"></script>
+    <script>
+        function getQueryParam(param) {
+            var searchParams = new URLSearchParams(window.location.search);
+            return searchParams.get(param);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var isBlank = getQueryParam("isBlank") === 'true'; // Asegúrate de que el valor comparado esté en minúsculas
+            var title = getQueryParam("title") || "New Document.docx";
+            var documentKey = Date.now().toString();
+
+            // Determina la URL del documento basado en si es un documento en blanco o se ha proporcionado un título específico
+            var documentUrl = isBlank ? "http://host.docker.internal:8080/blank.docx" :
+                `http://host.docker.internal:8080/${title}`; // Usa el título como parte de la URL del documento
+
+            new DocsAPI.DocEditor("placeholder", {
+                documentType: "text", // 'word' no es un tipo documentType válido, debe ser 'text', 'spreadsheet', o 'presentation'
+                document: {
+                    fileType: "docx",
+                    key: documentKey, // Una clave única para el nuevo documento
+                    title: title, // Título del documento basado en el parámetro o predeterminado
+                    url: documentUrl // URL del documento
+                },
+                editorConfig: {
+                    lang: "es",
+                    mode: "edit",
+                },
+                height: "700px",
+                width: "100%"
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="placeholder" style="height:100vh;"></div>
+</body>
+
+</html>

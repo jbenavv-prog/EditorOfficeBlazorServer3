@@ -1,0 +1,43 @@
+@page "/editor"
+@inject NavigationManager NavigationManager
+@using Microsoft.AspNetCore.WebUtilities;
+
+<h1>Editor</h1>
+
+<iframe src="@IframeSrc" style="width:100%; height:100vh;" frameborder="0" allowfullscreen></iframe>
+
+@code {
+    private string IframeSrc { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        var queryParams = QueryHelpers.ParseQuery(uri.Query);
+
+        bool isBlankDocument = true; // Indica si el documento es en blanco por defecto
+        string documentTitle = "blank.docx"; // Título predeterminado para documentos en blanco
+
+        // Intenta obtener el valor del parámetro 'plantilla'
+        if (queryParams.TryGetValue("plantilla", out var plantilla) && !string.IsNullOrWhiteSpace(plantilla))
+        {
+            // Se ha especificado una plantilla, así que se carga dicha plantilla
+            isBlankDocument = false;
+            documentTitle = plantilla; // El nombre de la plantilla actúa como el título del documento
+        }
+
+        // Construye la URL del iframe basada en si el documento es en blanco o una plantilla específica
+        IframeSrc = BuildIframeSrc(isBlankDocument, documentTitle);
+    }
+
+    private string BuildIframeSrc(bool isBlankDocument, string documentTitle)
+    {
+        // Asume que onlyoffice.html está en la raíz del servidor web de la aplicación
+        string baseUrl = "onlyoffice.html";
+
+        // Codifica el título para uso en URL
+        string encodedTitle = Uri.EscapeDataString(documentTitle);
+
+        // Construye la URL con los parámetros adecuados
+        return $"{baseUrl}?isBlank={isBlankDocument}&title={encodedTitle}";
+    }
+}

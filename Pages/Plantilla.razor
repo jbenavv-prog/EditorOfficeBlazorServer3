@@ -1,0 +1,31 @@
+@page "/de-una-plantilla"
+@inject NavigationManager NavigationManager
+
+<PageTitle>Seleccionar Plantilla</PageTitle>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Plantillas Disponibles</h1>
+    <div class="row">
+        @foreach (var plantilla in plantillas)
+        {
+            <div class="col-md-4 mb-3">
+                <button class="btn btn-primary w-100" @onclick="() => SeleccionarPlantilla(plantilla)">
+                    @plantilla
+                    <span class="oi oi-cloud-download d-block mt-2"></span>
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<string> plantillas = new List<string> {
+"A-GD-F005 FORMATO TABLA DE RETENCIÓN DOCUMENTAL v6.docx",
+"A-GD-F026 FORMATO HOJA DE CONTROL v3.docx"
+};
+
+    private void SeleccionarPlantilla(string nombrePlantilla)
+    {
+        NavigationManager.NavigateTo($"/editor?plantilla={Uri.EscapeDataString(nombrePlantilla)}");
+    }
+}
