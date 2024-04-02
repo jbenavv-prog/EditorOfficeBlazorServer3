@@ -29,3 +29,4 @@ C:\Users\RentAdvisor\Documents\ASPNET\EditorOfficeBlazorServer3\obj\Debug\net6.0
 C:\Users\RentAdvisor\Documents\ASPNET\EditorOfficeBlazorServer3\obj\Debug\net6.0\EditorOfficeBlazorServer3.pdb
 C:\Users\RentAdvisor\Documents\ASPNET\EditorOfficeBlazorServer3\obj\Debug\net6.0\EditorOfficeBlazorServer3.genruntimeconfig.cache
 C:\Users\RentAdvisor\Documents\ASPNET\EditorOfficeBlazorServer3\obj\Debug\net6.0\ref\EditorOfficeBlazorServer3.dll
+C:\Users\RentAdvisor\Documents\ASPNET\EditorOfficeBlazorServer3\obj\Debug\net6.0\EditorOfficeBlazorServer3.sourcelink.json

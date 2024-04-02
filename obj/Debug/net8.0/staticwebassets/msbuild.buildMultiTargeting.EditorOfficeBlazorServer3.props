@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\EditorOfficeBlazorServer3.props" />
+</Project>

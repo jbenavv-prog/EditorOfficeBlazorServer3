@@ -6,6 +6,7 @@
     <script>
         function getQueryParam(param) {
             var searchParams = new URLSearchParams(window.location.search);
+            console.log("window.location.search", window.location.search);;
             return searchParams.get(param);
         }
 
@@ -19,7 +20,7 @@
                 `http://host.docker.internal:8080/${title}`; // Usa el título como parte de la URL del documento
 
             new DocsAPI.DocEditor("placeholder", {
-                documentType: "text", // 'word' no es un tipo documentType válido, debe ser 'text', 'spreadsheet', o 'presentation'
+                documentType: "word", // 'word' no es un tipo documentType válido, debe ser 'text', 'spreadsheet', o 'presentation'
                 document: {
                     fileType: "docx",
                     key: documentKey, // Una clave única para el nuevo documento

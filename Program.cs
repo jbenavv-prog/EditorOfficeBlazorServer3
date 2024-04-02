@@ -1,8 +1,15 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 using EditorOfficeBlazorServer3.Data;
+using EditorOfficeBlazorServer3.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Agrega esto para registrar el contexto de base de datos
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();

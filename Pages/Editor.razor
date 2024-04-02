@@ -1,6 +1,9 @@
 @page "/editor"
-@inject NavigationManager NavigationManager
+@inject NavigationManager NavigationManager;
 @using Microsoft.AspNetCore.WebUtilities;
+@using EditorOfficeBlazorServer3.Services;
+@using EditorOfficeBlazorServer3.Models;
+@inject IUsuarioService UsuarioService;
 
 <h1>Editor</h1>
 
@@ -9,35 +12,38 @@
 @code {
     private string IframeSrc { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         var queryParams = QueryHelpers.ParseQuery(uri.Query);
 
-        bool isBlankDocument = true; // Indica si el documento es en blanco por defecto
-        string documentTitle = "blank.docx"; // Título predeterminado para documentos en blanco
+        bool isBlankDocument = true;
+        string documentTitle = "blank.docx"; // Mantén el título como estaba
 
-        // Intenta obtener el valor del parámetro 'plantilla'
         if (queryParams.TryGetValue("plantilla", out var plantilla) && !string.IsNullOrWhiteSpace(plantilla))
         {
-            // Se ha especificado una plantilla, así que se carga dicha plantilla
             isBlankDocument = false;
-            documentTitle = plantilla; // El nombre de la plantilla actúa como el título del documento
+            documentTitle = plantilla;
         }
 
-        // Construye la URL del iframe basada en si el documento es en blanco o una plantilla específica
-        IframeSrc = BuildIframeSrc(isBlankDocument, documentTitle);
+        // Suponiendo que obtienes los datos del primer usuario como ejemplo
+        var primerUsuario = await UsuarioService.GetUsuariosAsync();
+        var usuario = primerUsuario.FirstOrDefault();
+
+        IframeSrc = BuildIframeSrc(isBlankDocument, documentTitle, usuario);
     }
 
-    private string BuildIframeSrc(bool isBlankDocument, string documentTitle)
+    private string BuildIframeSrc(bool isBlankDocument, string documentTitle, Usuario usuario = null)
     {
-        // Asume que onlyoffice.html está en la raíz del servidor web de la aplicación
         string baseUrl = "onlyoffice.html";
-
-        // Codifica el título para uso en URL
         string encodedTitle = Uri.EscapeDataString(documentTitle);
 
-        // Construye la URL con los parámetros adecuados
-        return $"{baseUrl}?isBlank={isBlankDocument}&title={encodedTitle}";
+        // Añade parámetros adicionales si se ha proporcionado un usuario
+        string usuarioParams = usuario != null
+        ?
+        $"&nombre={Uri.EscapeDataString(usuario.Nombre)}&cedula={Uri.EscapeDataString(usuario.Cedula)}&direccion={Uri.EscapeDataString(usuario.Direccion)}"
+        : "";
+
+        return $"{baseUrl}?isBlank={isBlankDocument}&title={encodedTitle}{usuarioParams}";
     }
 }
