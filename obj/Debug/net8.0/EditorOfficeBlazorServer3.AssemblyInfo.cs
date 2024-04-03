@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EditorOfficeBlazorServer3")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe511b3c2f87035a457d58ef73fdce731eaf0a07")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08c96b6afe2c1d3cbe4d5410a0aac4313e4b183f")]
 [assembly: System.Reflection.AssemblyProductAttribute("EditorOfficeBlazorServer3")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EditorOfficeBlazorServer3")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

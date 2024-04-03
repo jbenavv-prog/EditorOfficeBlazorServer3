@@ -47,9 +47,9 @@ namespace EditorOfficeBlazorServer3.Controllers // Cambia esto por tu espacio de
             using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(modifiedFilePath, true))
             {
                 var body = wordDoc.MainDocumentPart.Document.Body;
-                ReplaceTextInBody(body, "{Nombre}", userData.Nombre);
-                ReplaceTextInBody(body, "{Cedula}", userData.Cedula);
-                ReplaceTextInBody(body, "{Direccion}", userData.Direccion);
+                ReplaceTextInBody(body, "Nombre", userData.Nombre);
+                ReplaceTextInBody(body, "Cedula", userData.Cedula);
+                ReplaceTextInBody(body, "Direccion", userData.Direccion);
 
                 wordDoc.MainDocumentPart.Document.Save(); // Guarda los cambios en el archivo copiado
             }
