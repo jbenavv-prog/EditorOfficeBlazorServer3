@@ -8,31 +8,63 @@
 
 <h1>Editor</h1>
 
+<!-- Select para usuarios -->
+<div class="d-flex justify-content-end">
+    <select @onchange="OnUserSelected" class="form-control w-auto">
+        <option value="">Seleccione un usuario</option>
+        @foreach (var usuario in Usuarios)
+        {
+            <option value="@usuario.Id">@usuario.Nombre</option>
+        }
+    </select>
+</div>
+
 <iframe src="@IframeSrc" style="width:100%; height:100vh;" frameborder="0" allowfullscreen></iframe>
 
 @code {
     private string IframeSrc { get; set; }
+    private List<Usuario> Usuarios { get; set; } = new List<Usuario>();
 
     protected override async Task OnInitializedAsync()
+    {
+        Usuarios = await UsuarioService.GetUsuariosAsync();
+        await LoadDocumentAsync();
+    }
+
+    private async Task OnUserSelected(ChangeEventArgs e)
+    {
+        var userId = e.Value.ToString();
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        var queryParams = QueryHelpers.ParseQuery(uri.Query);
+
+        string newUri = $"/editor?user={userId}";
+
+        // Conservar el parámetro 'plantilla' si ya está presente en la URL
+        if (queryParams.TryGetValue("plantilla", out var plantillaValue))
+        {
+            newUri += $"&plantilla={plantillaValue}";
+        }
+
+        NavigationManager.NavigateTo(newUri, forceLoad: true);
+    }
+
+    private async Task LoadDocumentAsync()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         var queryParams = QueryHelpers.ParseQuery(uri.Query);
 
         bool isBlankDocument = true;
-        string documentTitle = "blank.docx"; // Mantén el título como estaba
+        string documentTitle = "blank.docx";
 
-
-
-        if (queryParams.TryGetValue("plantilla", out var plantillaValue) && !string.IsNullOrWhiteSpace(plantillaValue))
+        if (queryParams.TryGetValue("plantilla", out var plantillaValue) && queryParams.TryGetValue("user", out var
+        userIdValue))
         {
-            var primerUsuario = await UsuarioService.GetUsuariosAsync();
-            var usuario = primerUsuario.FirstOrDefault();
-            var plantilla = plantillaValue.ToString(); // Convierte StringValues a string
-
+            var usuarioId = int.Parse(userIdValue);
+            var usuario = Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+            var plantilla = plantillaValue.ToString();
 
             if (usuario != null)
             {
-                var baseUri = NavigationManager.BaseUri;
                 var response = await Http.PostAsJsonAsync("api/ProcessTemplate", new
                 {
                     Nombre = usuario.Nombre,
@@ -43,27 +75,18 @@
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine("response.IsSuccessStatusCode");
-                    // Si la solicitud es exitosa, obtiene el nombre del archivo modificado del controlador
                     var modifiedFileName = await response.Content.ReadAsStringAsync();
                     modifiedFileName = modifiedFileName.Trim('"');
                     isBlankDocument = false;
                     documentTitle = modifiedFileName;
-                    Console.WriteLine("documentTitle");
-                    Console.WriteLine(documentTitle);
                 }
-
-                if (!response.IsSuccessStatusCode)
+                else
                 {
                     var problemDetails = await response.Content.ReadAsStringAsync();
                     Console.WriteLine(problemDetails);
-                    // Considera mostrar este mensaje en la interfaz de usuario para diagnosticar el problema.
                 }
             }
-
         }
-
-        // Suponiendo que obtienes los datos del primer usuario como ejemplo
 
         IframeSrc = BuildIframeSrc(isBlankDocument, documentTitle);
     }
@@ -72,8 +95,6 @@
     {
         string baseUrl = "onlyoffice.html";
         string encodedTitle = Uri.EscapeDataString(documentTitle);
-
-
         return $"{baseUrl}?isBlank={isBlankDocument}&title={encodedTitle}";
     }
 }

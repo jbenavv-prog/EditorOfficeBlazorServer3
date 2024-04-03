@@ -24,6 +24,6 @@
 
     private void SeleccionarPlantilla(string nombrePlantilla)
     {
-        NavigationManager.NavigateTo($"/editor?plantilla={Uri.EscapeDataString(nombrePlantilla)}");
+        NavigationManager.NavigateTo($"/editor?plantilla={Uri.EscapeDataString(nombrePlantilla)}&user=1");
     }
 }
