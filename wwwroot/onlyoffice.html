@@ -17,7 +17,7 @@
 
             // Determina la URL del documento basado en si es un documento en blanco o se ha proporcionado un título específico
             var documentUrl = isBlank ? "http://host.docker.internal:8080/blank.docx" :
-                `http://host.docker.internal:8080/${title}`; // Usa el título como parte de la URL del documento
+                `http://host.docker.internal:8080/tmp/${title}`; // Usa el título como parte de la URL del documento
 
             new DocsAPI.DocEditor("placeholder", {
                 documentType: "word", // 'word' no es un tipo documentType válido, debe ser 'text', 'spreadsheet', o 'presentation'

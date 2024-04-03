@@ -4,6 +4,7 @@
 @using EditorOfficeBlazorServer3.Services;
 @using EditorOfficeBlazorServer3.Models;
 @inject IUsuarioService UsuarioService;
+@inject HttpClient Http
 
 <h1>Editor</h1>
 
@@ -20,30 +21,59 @@
         bool isBlankDocument = true;
         string documentTitle = "blank.docx"; // Mantén el título como estaba
 
-        if (queryParams.TryGetValue("plantilla", out var plantilla) && !string.IsNullOrWhiteSpace(plantilla))
+
+
+        if (queryParams.TryGetValue("plantilla", out var plantillaValue) && !string.IsNullOrWhiteSpace(plantillaValue))
         {
-            isBlankDocument = false;
-            documentTitle = plantilla;
+            var primerUsuario = await UsuarioService.GetUsuariosAsync();
+            var usuario = primerUsuario.FirstOrDefault();
+            var plantilla = plantillaValue.ToString(); // Convierte StringValues a string
+
+
+            if (usuario != null)
+            {
+                var baseUri = NavigationManager.BaseUri;
+                var response = await Http.PostAsJsonAsync("api/ProcessTemplate", new
+                {
+                    Nombre = usuario.Nombre,
+                    Cedula = usuario.Cedula,
+                    Direccion = usuario.Direccion,
+                    TemplateName = plantilla
+                });
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("response.IsSuccessStatusCode");
+                    // Si la solicitud es exitosa, obtiene el nombre del archivo modificado del controlador
+                    var modifiedFileName = await response.Content.ReadAsStringAsync();
+                    modifiedFileName = modifiedFileName.Trim('"');
+                    isBlankDocument = false;
+                    documentTitle = modifiedFileName;
+                    Console.WriteLine("documentTitle");
+                    Console.WriteLine(documentTitle);
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var problemDetails = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(problemDetails);
+                    // Considera mostrar este mensaje en la interfaz de usuario para diagnosticar el problema.
+                }
+            }
+
         }
 
         // Suponiendo que obtienes los datos del primer usuario como ejemplo
-        var primerUsuario = await UsuarioService.GetUsuariosAsync();
-        var usuario = primerUsuario.FirstOrDefault();
 
-        IframeSrc = BuildIframeSrc(isBlankDocument, documentTitle, usuario);
+        IframeSrc = BuildIframeSrc(isBlankDocument, documentTitle);
     }
 
-    private string BuildIframeSrc(bool isBlankDocument, string documentTitle, Usuario usuario = null)
+    private string BuildIframeSrc(bool isBlankDocument, string documentTitle)
     {
         string baseUrl = "onlyoffice.html";
         string encodedTitle = Uri.EscapeDataString(documentTitle);
 
-        // Añade parámetros adicionales si se ha proporcionado un usuario
-        string usuarioParams = usuario != null
-        ?
-        $"&nombre={Uri.EscapeDataString(usuario.Nombre)}&cedula={Uri.EscapeDataString(usuario.Cedula)}&direccion={Uri.EscapeDataString(usuario.Direccion)}"
-        : "";
 
-        return $"{baseUrl}?isBlank={isBlankDocument}&title={encodedTitle}{usuarioParams}";
+        return $"{baseUrl}?isBlank={isBlankDocument}&title={encodedTitle}";
     }
 }

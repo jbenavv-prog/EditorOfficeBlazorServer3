@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "UZdGnvZKnhDDiRdWOkt/Vuun07zgr22/SJfSgib3C4U=",
+  "Hash": "UyWNLE6Eu9yUX2blYT/khS6JnsbYdbks5PJ7O66/ixc=",
   "Source": "EditorOfficeBlazorServer3",
   "BasePath": "_content/EditorOfficeBlazorServer3",
   "Mode": "Default",
@@ -319,6 +319,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\onlyoffice.html"
+    },
+    {
+      "Identity": "C:\\Users\\RentAdvisor\\Documents\\ASPNET\\EditorOfficeBlazorServer3\\wwwroot\\tmp\\modificado_638477347556312553.docx",
+      "SourceId": "EditorOfficeBlazorServer3",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\RentAdvisor\\Documents\\ASPNET\\EditorOfficeBlazorServer3\\wwwroot\\",
+      "BasePath": "_content/EditorOfficeBlazorServer3",
+      "RelativePath": "tmp/modificado_638477347556312553.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\tmp\\modificado_638477347556312553.docx"
+    },
+    {
+      "Identity": "C:\\Users\\RentAdvisor\\Documents\\ASPNET\\EditorOfficeBlazorServer3\\wwwroot\\tmp\\modificado_638477347588438785.docx",
+      "SourceId": "EditorOfficeBlazorServer3",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\RentAdvisor\\Documents\\ASPNET\\EditorOfficeBlazorServer3\\wwwroot\\",
+      "BasePath": "_content/EditorOfficeBlazorServer3",
+      "RelativePath": "tmp/modificado_638477347588438785.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\tmp\\modificado_638477347588438785.docx"
     }
   ]
 }
